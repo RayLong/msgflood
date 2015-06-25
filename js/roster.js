@@ -80,6 +80,7 @@ function line_handler()
 
    c.on('stanza', function(stanza) {
      console.log("roster:", stanza.toString()); 
+     c.end();
    });
 
    c.on('error', function(error) {
