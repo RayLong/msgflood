@@ -1,0 +1,18 @@
+--- node_modules/node-xmpp-client/lib/authentication/plain.js	2014-11-13 04:43:27.000000000 +0800
++++ node_modules.back/node-xmpp-client/lib/authentication/plain.js	2015-06-25 00:46:23.289501172 +0800
+@@ -10,7 +10,7 @@
+ Plain.prototype.name = 'PLAIN'
+ 
+ Plain.prototype.auth = function() {
+-    return this.authzid + '\0' +
++    return /*this.authzid +*/ '\0' +
+         this.authcid + '\0' +
+         this.password;
+ }
+@@ -20,4 +20,4 @@
+     return false
+ }
+ 
+-module.exports = Plain
+\ No newline at end of file
++module.exports = Plain

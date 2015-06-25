@@ -1,0 +1,179 @@
+--- node_modules/sazzle/mechanisms/scram-sha1.js	2014-08-07 23:45:58.000000000 +0800
++++ node_modules.back/sazzle/mechanisms/scram-sha1.js	2015-06-24 18:52:37.375060756 +0800
+@@ -104,19 +104,19 @@
+ 
+         });
+     } catch (ex) {
+-        return q.reject(ex);
++        return ex;
+     }
+ 
+-    if          (unexpected.length) {
++    if  (unexpected.length) {
+         var err = new Error("unexpected fields");
+         err.fields = unexpected;
+-        return q.reject(err);
++        return err;
+     } else if   (expected.length || empty > 0) {
+         var err = new Error("missing fields");
+         err.fields = expected;
+-        return q.reject(err);
++        return err;
+     } else {
+-        return q.resolve(fields);
++        return fields;
+     }
+ };
+ var __parseClientFields = function(fields, input, expected, allowed) {
+@@ -198,19 +198,19 @@
+ exports.client = {
+     name: "SCRAM-SHA1",
+     stepStart: function(config) {
+-        return helpers.promisedValue(config, "username").
+-               then(function(usr) {
+-                    return q.all([
+-                        q.resolve(usr),
+-                        helpers.promisedValue(config, "nonce"),
+-                        helpers.promisedValue(config, "authzid", usr)
+-                    ]);
+-               }).
+-               then(function(factors) {
++        //return helpers.promisedValue(config, "username").
++        //       then(function(usr) {
++        //            return q.all([
++        //                q.resolve(usr),
++        //                helpers.promisedValue(config, "nonce"),
++        //                helpers.promisedValue(config, "authzid", usr)
++        //            ]);
++        //       }).
++        //       then(function(factors) {
+                     var fields = config.authScram = {};
+-                    fields.username = factors[0];
+-                    fields.nonce = factors[1];
+-                    fields.authzid = factors[2];
++                    fields.username = config['username'];
++                    fields.nonce = config['nonce'];
++                    fields.authzid = config['authzid'];
+                     fields.binding = [
+                         "n",
+                         (fields.authzid ? "a=" + fields.authzid : ""),
+@@ -229,29 +229,28 @@
+                     fields.messages = [data];
+ 
+                     data = fields.binding + data;
+-
+-                    return q.resolve({
++                    
++                    return {
+                         state:"auth",
+                         data:data
+-                    });
+-               });
++                    };
++               //});
+     },
+     stepAuth: function(config, input) {
+         input = input.toString("binary").
+                 split(",");
+-
+         var message = [];
+         var fields = config.authScram;
+         var nonce = fields.nonce;
+         delete fields.nonce;
+ 
+-        return q.all([
+-            __parseServerFields(fields, input,  ["r", "s", "i"]),
+-            helpers.promisedValue(config, "password", fields.username)
+-        ]).then(function(factors) {
+-            var fields = factors[0];
+-            var pwd = factors[1];
+-
++    //    return q.all([
++            //helpers.promisedValue(config, "password", fields.username)
++        //]).then(function(factors) {
++            var fields = //factors[0];
++                __parseServerFields(fields, input,  ["r", "s", "i"]);
++            var pwd = //factors[1];
++                config['password'];
+             // store server-first-message
+             fields.messages.push(input.join(","));
+ 
+@@ -261,12 +260,12 @@
+ 
+             // validate server nonce starts with client nonce
+             if (fields.nonce.substring(0, nonce.length) !== nonce) {
+-                return q.reject(new Error("nonce mismatch"));
++                return new Error("nonce mismatch");
+             }
+ 
+             // validate iterations is greater than 0
+             if (isNaN(fields.iterations) || fields.iterations <= 0) {
+-                return q.reject(new Error("invalid iteration"));
++                return new Error("invalid iteration");
+             }
+ 
+             // (start to) construct client-final-message
+@@ -277,8 +276,8 @@
+             fields.messages.push(message.join(","));
+ 
+             // calculate SaltedPassword
+-            return pbkdf2("sha1")(pwd, fields.salt, fields.iterations, 20);
+-        }).then(function(spwd) {
++            spwd = pbkdf2("sha1")(pwd, fields.salt, fields.iterations, 20);
++        //}).then(function(spwd) {
+             // calculate ClientKey, ClientSig, ClientProof
+             var key, proof, sig;
+             key = calcClientKey(spwd);
+@@ -289,34 +288,34 @@
+             fields.password = spwd;
+ 
+             message.push("p=" + proof);
+-            return q.resolve({
++            return {
+                 state:"verify",
+                 data:message.join(",")
+-            });
+-        });
++            };
++        //});
+     },
+     stepVerify: function(config, input) {
+         input = input.toString("binary").
+                 split(",");
+ 
+         var fields = config.authScram;
+-        return __parseServerFields(fields, input, ["v"]).
+-               then(function(fields) {
++         //      then(function(fields) {
+                     // Calculate ServerKey, ServerSignature
+                     var key, sig;
++                    var fields = __parseServerFields(fields, input, ["v"]);
+                     key = calcServerKey(fields.password);
+                     sig = calcServerSig(key, fields.messages.join(","));
+ 
+                     if (fields.verification !== sig) {
+-                        return q.reject(new Error("verification failed"));
++                        return new Error("verification failed");
+                     } else {
+-                        return q.resolve({
++                        return {
+                             state:"complete",
+                             username:fields.username,
+                             authzid:fields.authzid || fields.username
+-                        });
++                        };
+                     }
+-               });
++               //});
+     }
+ };
+ 
+@@ -354,7 +353,7 @@
+ 
+         // input[0] == binding request
+         if (input[0] !== "n") {
+-            return q.reject(new Error("channel binding not supported"));
++            return new Error("channel binding not supported");
+         }
+         input.splice(0, 1);
+ 

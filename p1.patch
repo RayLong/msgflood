@@ -1,0 +1,26 @@
+--- node_modules/node-xmpp-client/index.js	2014-12-15 04:49:11.000000000 +0800
++++ node_modules.back/node-xmpp-client/index.js	2015-06-25 00:34:11.826878716 +0800
+@@ -11,6 +11,7 @@
+   , XOAuth2 = require('./lib/authentication/xoauth2')
+   , XFacebookPlatform = require('./lib/authentication/xfacebook')
+   , External = require('./lib/authentication/external')
++  , Scram = require('./lib/authentication/scram')
+   , exec = require('child_process').exec
+   , util = require('util')
+   , debug = require('debug')('xmpp:client')
+@@ -129,7 +130,7 @@
+     this.options = {}
+     if (options) this.options = options
+     this.availableSaslMechanisms = [
+-        XOAuth2, XFacebookPlatform, External, DigestMD5, Plain, Anonymous
++        XOAuth2, XFacebookPlatform, External, DigestMD5, Plain, Anonymous, Scram
+     ]
+ 
+     if (this.options.autostart !== false)
+@@ -420,4 +421,4 @@
+ Client.Client = Client
+ Client.Stanza = Stanza
+ Client.ltx = ltx
+-module.exports = Client
+\ No newline at end of file
++module.exports = Client

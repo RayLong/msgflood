@@ -1,0 +1,52 @@
+--- node_modules/sazzle/lib/pbkdf2.js	2014-04-18 02:06:55.000000000 +0800
++++ node_modules.back/sazzle/lib/pbkdf2.js	2015-06-24 18:47:43.763707842 +0800
+@@ -73,7 +73,6 @@
+         password = password || "";
+         salt = salt || "";
+ 
+-        var deferred = q.defer();
+         var maxBlocks = Math.ceil(keylen / hLen);
+         var blocks = [];
+         var calcBlock = function(bdata) {
+@@ -82,13 +81,12 @@
+             }
+             if (blocks.length === maxBlocks) {
+                 var result = blocks.join("").substring(0, keylen);
+-                deferred.resolve(result);
+-                return;
++                return result;
+             }
+ 
+             var U = "",
+                 cidx = 0,
+-                cdeferred = q.defer();
++                cdeferred; 
+             var calcIterations = function(hash) {
+                 var limit = Math.min(iters - cidx, BATCH_ITERATIONS);
+                 for (var count = 0;count < limit; count++) {
+@@ -100,20 +98,19 @@
+                 cidx += count;
+ 
+                 if (cidx === iters) {
+-                    cdeferred.resolve(U.toString("binary"));
++                    cdeferred=U.toString("binary");
+                     return;
+                 }
+-
+-                return q.resolve(hash).then(calcIterations);
++                calcIterations(hash);
+             }
++
+             calcIterations(salt + __INT(blocks.length + 1));
+ 
+-            return cdeferred.promise.then(calcBlock);
++            return calcBlock(cdeferred);
+         }
+ 
+-        calcBlock();
++        return calcBlock();
+ 
+-        return deferred.promise;
+     });
+     
+     return fn;

@@ -1,0 +1,46 @@
+--- node_modules/sazzle/lib/session.js	2014-05-01 11:22:47.000000000 +0800
++++ node_modules.back/sazzle/lib/session.js	2015-06-24 18:53:39.553467776 +0800
+@@ -114,31 +114,24 @@
+             if (output && typeof(output.then) === "function") {
+                 promise = output;
+             } else if (output instanceof Error) {
+-                promise = q.reject(output);
++                promise = output;
+             } else {
+-                promise = q.resolve(output);
++                promise = output;
+             }
+         } catch (ex) {
+-            promise = q.reject(ex);
++            promise = ex;
+         }
+ 
+-        var deferred = q.defer();
+-        promise.then(function(out) {
+-            var data = out.data;
+-            config.state = out.state || config.state;
+-            Object.keys(out).forEach(function(p) {
+-                if (p === "data" || p === "state") {
+-                    return;
+-                }
+-                props[p] = out[p];
+-            })
+-            deferred.resolve(data);
+-        }, function(err) {
+-            config.state = "complete";
+-            deferred.reject(err);
+-        });
++        var data = promise.data;
++        config.state = promise.state || config.state;
++        Object.keys(promise).forEach(function(p) {
++          if (p === "data" || p === "state") {
++            return;
++          }
++          props[p] = promise[p];
++        })
+ 
+-        return deferred.promise;
++        return data;
+     }
+ }
+ 

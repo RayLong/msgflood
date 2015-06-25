@@ -1,0 +1,39 @@
++++ node_modules/node-xmpp-client/lib/authentication/scram.js	2015-06-24 18:23:24.946514035 +0800
+@@ -0,0 +1,37 @@
++'use strict';
++var util = require('util')
++  , Mechanism = require('./mechanism')
++  , sazzle = require('sazzle')
++
++function Scram() 
++{
++
++}
++
++util.inherits(Scram, Mechanism);
++
++Scram.prototype.name = 'SCRAM-SHA-1';
++
++Scram.prototype.auth = function(){
++  if(!this.session){
++    this.session = sazzle.client.create('SCRAM-SHA1', {
++      username:this.authcid,
++      password:this.password
++    });
++  }
++  return this.session.step();
++}
++
++Scram.prototype.challenge = function(s) {
++  return this.session.step(s, 'utf8');
++}
++
++Scram.prototype.response = function(s) {
++}
++
++Scram.prototype.match = function (options){
++  if(options.password) return true;
++  return false;
++}
++
++module.exports = Scram;
