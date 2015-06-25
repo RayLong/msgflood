@@ -53,7 +53,7 @@ var stop_all = false;
 var keepalive_timer=[];
 var message_timer=[];
 
-setTimeout(function(){
+/*setTimeout(function(){
   function clr(e){
     clearInterval(e);
   }
@@ -65,6 +65,7 @@ setTimeout(function(){
     e.end();
   });
 },opt.options.timeout*1000);
+*/
 
 function line_handler()
 {
