@@ -1,5 +1,5 @@
 var Client = require('node-xmpp-client');
-var LineReader = require('./lines');
+var LineReader = require('./lines').LineReader;
 var ltx = require('node-xmpp-core').ltx;
 var opt=require("./cmd");
 
@@ -10,6 +10,7 @@ var users=new LineReader(opt.options.users);
 var contacts = new LineReader(opt.options.contacts);
 var online_users = 0;
 var const_action_interval = opt.options.action_interval;
+var const_sub_interval = opt.options.sub_interval;
 var const_login_interval = opt.options.login_interval;
 var stop_all = false;
 var keepalive_timer=[];
@@ -56,7 +57,7 @@ function line_handler()
                console.log(cc.jid.bare().toString(), "is offline");
              }
              index+=1;
-           },const_action_interval*1000);
+           },const_sub_interval*1000);
          }
      , 5000);
      return ;

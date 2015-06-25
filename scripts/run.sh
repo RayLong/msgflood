@@ -8,14 +8,14 @@ function remote_stop {
 }
 
 case $1 in
-   'users')
-     m=0
-     for x in cmb1 tsung2 tsung3; do
-        scp /tmp/u-$m.txt $x:/tmp/u-s.txt
-	scp /tmp/c-$(( ( $m + 1 ) % 3 )).txt $x:/tmp/c-s.txt
-        m=$(( $m + 1 ))
-     done 
-     ;;
+  'users')
+    m=0
+    for x in cmb1 tsung2 tsung3; do
+      scp /tmp/u-$m.txt $x:/tmp/u-s.txt
+      scp /tmp/c-$(( ( $m + 1 ) % 3 )).txt $x:/tmp/c-s.txt
+      m=$(( $m + 1 ))
+    done 
+    ;;
 
  'friend') 
      for x in cmb1 tsung2 tsung3 ; do

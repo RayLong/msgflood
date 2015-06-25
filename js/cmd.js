@@ -3,10 +3,11 @@ function parse()
 {
   options
     .version('0.1')
-    .option('--login_interval <s>', 'interval between login of users', Number, 0.04)
+    .option('--login_interval <s>', 'interval between login of users', Number, 0.1)
     .option('-u, --users <filename>', 'specify jid;host;password in a file', String, "users.txt")
     .option('-c, --contacts <filename>', 'specify jid of contact in a file', String, "contacts.txt")
-    .option('--action_interval <s>', 'specify interval between xmpp actions', Number, 1)
+    .option('--action_interval <s>', 'specify interval between xmpp actions', Number, 20)
+    .option('--sub_interval <s>', 'specify interval between xmpp actions', Number, 0.2)
     .option('-t, --timeout <s>', 'specify overall timeout', Number, 1)
     .option('-d, --data <data filename>', 'specify the filename for statistics data output', String, "data.txt")
   options.parse(process.argv);

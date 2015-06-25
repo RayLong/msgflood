@@ -1,5 +1,5 @@
 var Client = require('node-xmpp-client');
-var LineReader = require('./lines');
+var LineReader = require('./lines').LineReader;
 var ltx = require('node-xmpp-core').ltx;
 var opt=require("./cmd");
 
