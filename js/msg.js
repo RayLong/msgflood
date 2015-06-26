@@ -59,7 +59,7 @@ function line_handler()
              index+=1;
            },const_sub_interval*1000);
          }
-     , 5000);
+     , 20000);
      return ;
    }
    var user=line.split(";");
