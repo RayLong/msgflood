@@ -30,7 +30,8 @@ function login()
    var c = new Client({
      jid: user[0],
      password: user[2],
-     host: user[1]
+     host: user[1],
+     reconnect:true
    });
    
    {
@@ -67,6 +68,7 @@ function login()
            }).c('timestamp').t(t.toString());
            c.send(s);
            console.log("subscribe", c.contact);
+           c.state_machine = 'roster';
          }
          break;
          case 'roster':
