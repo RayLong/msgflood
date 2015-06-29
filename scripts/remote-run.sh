@@ -1,6 +1,6 @@
 #!/bin/bash
 function remote_tmux {
-  ssh $1 "tmux new -d -s \"$2\" \"node $3 --users $4 --contacts $5 --login_interval $7 --sub_interval 1 --action_interval 30 | tee $6\""
+  ssh $1 "tmux new -d -s \"$2\" \"node $3 --users $4 --contacts $5 --login_interval $7 --sub_interval 1 --action_interval 30 >$6 2>&1 \""
 }
 
 function remote_stop {

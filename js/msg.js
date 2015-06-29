@@ -48,6 +48,7 @@ function login()
      console.log(user[0],'is online. contact is ' + to );
      online_users+=1;
      message_timer.push(setInterval(function(){
+       if(c.state!=5) return;
        switch (c.state_machine){
          case 'msg':
            {
