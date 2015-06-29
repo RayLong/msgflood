@@ -2,6 +2,7 @@ var Client = require('node-xmpp-client');
 var LineReader = require('./lines').LineReader;
 var ltx = require('node-xmpp-core').ltx;
 var opt=require("./cmd");
+var exec = require('child_process').exec;
 
 opt.parse();
 
@@ -16,6 +17,22 @@ var const_keepalive_timeout = opt.options.keepalive_timeout;
 var stop_all = false;
 var keepalive_timer=[];
 var message_timer=[];
+
+var snmp_agent = null;
+
+function snmp_monitor(agent)
+{
+  var c1='snmpwalk -v2c -cpublic ';
+  var c2=[/*CPU idle*/' .1.3.6.1.4.1.2021.11.11.0',
+      /*CPU load 1min*/' .1.3.6.1.4.1.2021.10.1.3.1',
+      /*free mem*/' .1.3.6.1.4.1.2021.4.11.0'];
+  var date=(new Date).toISOString();
+  c2.forEach(function (e) {
+    exec(c1+agent+e, function(err, stdout, stderr){
+      console.log(date, ':', stdout);
+    });
+  });
+}
 
 function login()
 {
@@ -33,6 +50,11 @@ function login()
      host: user[1],
      reconnect:true
    });
+
+   if(!snmp_agent){
+     snmp_agent=user[1];
+     setInterval(snmp_monitor, 60000, snmp_agent);
+   }
    
    {
      var to=contacts.readline();
