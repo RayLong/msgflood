@@ -28,8 +28,10 @@ case $1 in
         remote_stop $x friend
      done
      sleep 1
+     rdate=$(date +"%Y%m%d-%H%M%S")
+     mkdir -p $rdate
      for x in $2 $3 $4 ; do
-        scp $x:/tmp/test.log $x"_test.log"
+        scp $x:/tmp/test.log $rdate/$x"_test.log"
      done
   ;;
   
