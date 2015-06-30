@@ -12,7 +12,8 @@ options
   .option('-d, --dname <domainN>', 'specify the domain name', collect, [])
   .option('-i, --ip <ip address>', 'ip address', collect, [])
   .option('-f, --filename <filename>', 'user name and password')
-  .option('-n, --number <N>', 'users for one group');
+  .option('-n, --number <N>', 'users for one group')
+  .option('-l, --path <dir name>', 'users for one group');
 
 options.parse(process.argv);
 console.log("options:", options);
@@ -20,6 +21,7 @@ var rawlines = new LineReader(options.filename);
 var groups=options.dname.length;
 var dname=options.dname;
 var ips=options.ip;
+var path=options.path;
 
 if (groups != options.ip.length){
   console.log("how many domain and how many ip should be same");
@@ -29,8 +31,8 @@ if (groups != options.ip.length){
 var fs=require('fs')
 for(i_groups=0;i_groups<groups;i_groups++)
 {
-  var ufn='/tmp/u-'+i_groups.toString()+'.txt';
-  var cfn='/tmp/c-'+i_groups.toString()+'.txt';
+  var ufn = path + '/u-'+i_groups.toString()+'.txt';
+  var cfn = path + '/c-'+i_groups.toString()+'.txt';
   var ufd,cfd;
   for(i_numbers=0;i_numbers<options.number;i_numbers++)
   {
