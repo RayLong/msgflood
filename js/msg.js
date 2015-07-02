@@ -74,9 +74,7 @@ function login()
        online_users+=1;
 
        var s = new ltx.Element('presence',{
-          id:'pp:' + stanza_id
-         });
-       stanza_id += 1;
+          id:'pp:1'          });
        c.send(s);
 
        message_timer.push(setInterval(function(){
