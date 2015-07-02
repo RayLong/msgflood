@@ -69,7 +69,10 @@ function login()
          c.send(s);
        },1000);
        keepalive_timer.push( setInterval( function(){
-         if(c.state!=5) return;
+         if(c.state!=5) {
+           console.log(user[0],'offline, skip');
+           return;
+         }
          //<iq type='get' id='keepalive:4690'><query xmlns='eyeball:keepalive'/></iq>
          var s = new ltx.Element('iq',{
            type:'get', 

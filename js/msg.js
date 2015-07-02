@@ -65,12 +65,25 @@ function login()
      c.contact = to;
      c.state_machine = 'roster';
    }
-
+   var reconnect_number = 0;
+   var my_index = 0;
    c.on('online', function() {
-     console.log(user[0],'is online. contact is ' + to );
-     online_users+=1;
-     message_timer.push(setInterval(function(){
-       if(c.state!=5) return;
+     if(reconnect_number == 0){
+       console.log('i =',online_users,'is online. contact is ' + to );
+       my_index = online_users;
+       online_users+=1;
+
+       var s = new ltx.Element('presence',{
+          id:'pp:' + stanza_id
+         });
+       stanza_id += 1;
+       c.send(s);
+
+       message_timer.push(setInterval(function(){
+       if(c.state != 5){
+         console.log(my_index, "offline, skip");
+         return;
+       }
        switch (c.state_machine){
          case 'msg':
            {
@@ -106,6 +119,10 @@ function login()
          break;
        }
      },const_action_interval*1000));
+     }else{
+       console.log(my_index,'reconnected,',reconnect_number);
+     }
+     reconnect_number+=1;
    });
 
    c.on('stanza', function(stanza) {
