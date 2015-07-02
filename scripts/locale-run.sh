@@ -1,6 +1,6 @@
 #!/bin/bash
 function local_tmux {
-  tmux new -d -s "$1" "node $2 --users $3 --contacts $4 --login_interval $6 --action_interval 5 -t 30 >$5 2>&1"
+  tmux new -d -s "$1" "node $2 --users $3 --contacts $4 --login_interval $6 --action_interval 5 -t 1 >$5 2>&1"
 }
 
 function local_tmux_stop {

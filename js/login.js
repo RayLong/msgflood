@@ -61,6 +61,13 @@ function login()
    c.on('online', function() {
      if(reconnect_number == 0){
        console.log(user[0],'is online');
+       setTimeout(function(){
+         var s = new ltx.Element('presence',{
+           id:'presence:' + stanza_id
+         });
+         stanza_id += 1;
+         c.send(s);
+       },1000);
        keepalive_timer.push( setInterval( function(){
          if(c.state!=5) return;
          //<iq type='get' id='keepalive:4690'><query xmlns='eyeball:keepalive'/></iq>
