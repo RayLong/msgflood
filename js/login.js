@@ -90,7 +90,35 @@ function login()
    });
 
    c.on('stanza', function(stanza) {
-     console.log(user[0],"got ret:", stanza.toString());
+     switch (stanza.name){
+       case "presence":
+         if(stanza.attrs.type == "subscribe"){
+           if(stanza.children[0].name=='timestamp'){
+             var t=new Date/1000;
+             var t0=stanza.children[0].text();
+             console.log("pres delay:" + (t-t0).toString());
+             var s=new ltx.Element('presence',
+               {to:stanza.attrs.from,
+                 type:"subscribed", 
+                 id:Math.floor(Math.random()*65535)
+               }
+               );
+             c.send(s);
+           }
+         }
+         break;
+       case 'message':
+         {
+           if(stanza.attrs.type == 'chat'){
+             if ( stanza.children[0].name == 'timestamp' ) {
+               var t0=stanza.children[0].text();
+               var t = new Date/1000;
+               console.log("msg delay:", (t-t0).toString());
+             }
+           }
+         }
+         break;
+     }
    });
 
    c.on('error', function(error) {
