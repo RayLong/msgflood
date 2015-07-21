@@ -160,7 +160,7 @@ function login()
      case 'iq':
      {
        var q=stanza.children[0];
-       if( (q.name == 'query') && 
+       if( (q.name == 'query') && (stanza.attrs.type == 'result') && 
            (q.attrs.xmlns == 'jabber:iq:roster' )) {
              q.children.forEach(function (e) {
                if ((e.attrs.jid == c.contact) && 
