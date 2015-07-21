@@ -161,18 +161,18 @@ function login()
      {
        var q=stanza.children[0];
        if( (q.name == 'query') && 
-         (q.attrs.xmlns == 'jabber:iq:roster' )) {
-           q.children.forEach(function (e) {
-             if ((e.attrs.jid == c.contact) && 
-               (e.attrs.subscription != 'none')){
-               c.state_machine = 'msg';
-               console.log(c.contact,"subscribed");
+           (q.attrs.xmlns == 'jabber:iq:roster' )) {
+             q.children.forEach(function (e) {
+               if ((e.attrs.jid == c.contact) && 
+                 (e.attrs.subscription != 'none')){
+                   c.state_machine = 'msg';
+                   console.log(c.contact,"subscribed");
+                 }
+             });
+             if (c.state_machine != 'msg'){
+               c.state_machine = 'presence';
              }
-           });
-         }
-       if (c.state_machine != 'msg'){
-         c.state_machine = 'presence';
-       }
+           }
      }
      break;
      default:
